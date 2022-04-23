@@ -1,50 +1,113 @@
-omit();
-showNextLecture();
-showTodayLecture();
-function omit() {
-  const elements = document.getElementsByClassName("courseCardName");
-  for(const elt of elements) {
-    const lectureLinkHTML = elt.childNodes[1];
-    let lectureName = elt.childNodes[2].textContent; 
-  
-    if (lectureName.includes("[")) {
-      elt.childNodes[2].textContent = lectureName.split("[")[0];
-    }
-    if (lectureName.includes("(")) {
-      elt.childNodes[2].textContent = elt.innerText.split("(")[0];
-    }
-    if (lectureName.includes("【連絡専用】")) {
-      elt.childNodes[2].textContent = elt.innerText.split("【連絡専用】")[1];
-    }
-    if (lectureName.includes("実施済み")) {
-      elt.childNodes[2].textContent = "実施";
-    }
-  }
+unclickable();
+function unclickable() {
+  let csbList = document.getElementsByClassName("csbList")[0];
+  csbList.classList.remove("clickable");
+  let csbStr = document.getElementsByClassName("csbStr")[0];
+  csbStr.classList.remove("clickable");
 }
 
-function showTodayLecture() {
-  const dayBoxes = document.getElementsByClassName("dayBox");
-  const unix_time = new Date();
-  const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][unix_time.getDay()] + "曜日";
-
-  for(const dayBox of dayBoxes) {
-    if(dayBox.childNodes[1] && dayBox.childNodes[1].innerText.slice(-3) == dayOfWeek) {
-      dayBox.childNodes[1].innerText = " 今日の講義 (" + dayBox.childNodes[1].innerText + " )";
-      dayBoxes[0].before(dayBox);
-    }
-  }
-}
-function showNextLecture() {
-  const dayBoxes = document.getElementsByClassName("dayBox");
-  const unix_time = new Date();
-  unix_time.setDate( unix_time.getDate() + 1)
-  const dayOfWeek = ['月', '月', '火', '水', '木', '金', '月'][unix_time.getDay()] + "曜日";
-
-  for(const dayBox of dayBoxes) {
-    if(dayBox.childNodes[1] && dayBox.childNodes[1].innerText.slice(-3) == dayOfWeek) {
-      dayBox.childNodes[1].innerText = " 次回の講義 (" + dayBox.childNodes[1].innerText + " )";
-      dayBoxes[0].before(dayBox);
-    }
-  }
+moveNewsArea();
+function moveNewsArea() {
+  let newsArea = document.getElementsByClassName("newsArea")[0];
+  let form = document.getElementById("homehomlInfo");
+  form.appendChild(newsArea);
+  let newsSubO = newsArea.getElementsByClassName("newsSubO");
+  // for(let news of newsSubO){
+  //   news.innerText = news.innerText.substr(13);
+  // }
 }
 
+
+changeToOldLmsTable();
+function changeToOldLmsTable() {
+  const tableInfo = getClassData();
+  createTable(tableInfo);
+  removeOrigin();
+}
+
+function getClassData() {
+  let tableInfo = []
+  const dayOfWeekTags = document.getElementsByClassName("cpLabel");
+  for(dayOfWeekTag of dayOfWeekTags) {
+    let tableRow = {};
+    if(dayOfWeekTag.innerText) {
+      tableRow.dayOfWeek = dayOfWeekTag.innerText;
+      tableInfo.push(tableRow);
+    }
+  }
+  const dayOfWeekClasses = document.getElementsByClassName("courseCardArea");
+  for(i=0;i < dayOfWeekClasses.length;i++) {
+    const periods = dayOfWeekClasses[i].getElementsByClassName("courseCardInfo");
+    tableInfo[i].periods = periods
+    const classes = dayOfWeekClasses[i].getElementsByClassName("courseCardName");
+    tableInfo[i].classes = classes;
+    let teacherNameTags = dayOfWeekClasses[i].getElementsByClassName("courseCardUser");
+    console.log(teacherNameTags);
+    let teacherNames = [];
+    for(j=0;j < teacherNameTags.length;j++) {
+      teacherNames.push(teacherNameTags[j].innerText.split("[")[0]);
+    }
+    tableInfo[i].teacherNames = teacherNames;
+  }
+  tableInfo[0].classes[0].classList.add("changedClass");
+  return tableInfo;
+} 
+
+function createTable(tableInfo) {
+  let classTable = document.createElement("table");
+  classTable.classList.add("classTable");
+  classTable.setAttribute("cellspacing",0);
+  for(const dayOfWeekInfo of tableInfo) {
+    for(let i = 0;i < dayOfWeekInfo.classes.length;i++) {
+      let tr = document.createElement("tr");
+      if(i === 0) {
+        let th = document.createElement("th");
+        th.innerText = dayOfWeekInfo.dayOfWeek;
+        th.setAttribute("rowspan",dayOfWeekInfo.classes.length);
+        th.innerText = dayOfWeekInfo.dayOfWeek;
+        tr.appendChild(th);
+      }
+      let periodTd = document.createElement("td");
+      periodTd.classList.add("periodTd");
+      periodTd.innerText = dayOfWeekInfo.periods[i].innerText.split("春" || "秋")[0];
+      tr.appendChild(periodTd);
+
+      let classNameTd = document.createElement("td");
+      classNameTd.classList.add("classNameTd");
+      classNameTd.innerText = omit(dayOfWeekInfo.classes[i].innerText);
+      tr.appendChild(classNameTd);
+      
+      tr.appendChild(dayOfWeekInfo.classes[i].childNodes[1]);
+
+      let teacherNameTd = document.createElement("td");
+      teacherNameTd.innerText = dayOfWeekInfo.teacherNames[i];
+      tr.appendChild(teacherNameTd);
+      
+      
+      
+      classTable.appendChild(tr);
+    }
+  }
+  let searchBox = document.getElementsByClassName("courseSearchArea");
+  console.log(classTable);
+  searchBox[0].after(classTable);
+}
+function omit(className) {
+  if (className.includes("[")) {
+    className = className.split("[")[0];
+  }
+  else if (className.includes("(")) {
+    className = className.split("(")[0];
+  }
+  if (className.includes("【連絡専用】")) {
+    className = className.split("【連絡専用】")[1];
+  }
+  if (className.includes("実施済み")) {
+    className = "実施";
+  }
+  return className
+}
+function removeOrigin() {
+  let home = document.getElementsByClassName("weeklyCourseArea")[0];
+  home.remove();
+}

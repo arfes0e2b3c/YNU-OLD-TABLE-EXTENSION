@@ -1,0 +1,81 @@
+.newsArea{
+  display: flex !important;
+  flex-direction: column;
+  box-sizing: border-box !important;
+  width: 92% !important;
+}
+.newsBlock{
+  border: none !important;
+  margin-bottom: 10px;
+}
+.newsSubO img{
+  display: none !important;
+}
+.csbList,.csbStr{
+  background-color: transparent !important;
+  color: #333 !important;
+  border: 2px solid rgba(0,0,0,0.4);
+}
+.csbStr{
+  border-width: 2px 0;
+}
+.cpMargin{
+  margin-bottom: 0 !important;
+}
+.courseCard {
+  height: 60px !important;
+  min-height: 0 !important;
+  width: 80% !important;
+}
+.courseCardArea{
+  display: flex !important;
+  flex-direction: column;
+}
+.courseCardContents{
+  height: 46px !important;
+}
+.courseCardInfo{
+  padding: 5px 8px !important;
+}
+.classTable{
+  border:2px solid rgba(0,0,0,0.1);
+  white-space: nowrap;
+  width: 100%;
+}
+.classTable tr{
+  position: relative;
+  transition: .3s;
+}
+.classTable tr a{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 89.33% !important;
+  height: 100% !important;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.classTable tr:nth-child(2n) {
+  background-color: rgb(228,247,254);
+}
+.classTable tr:hover{
+  background-color:rgb(208,227,254);
+}
+.classTable th{
+  text-align: center;
+  border:1px solid rgba(0,0,0,0.1);
+  border-width: 0 1px 1px 0;
+  padding: 0 10px;
+  pointer-events: none;
+  z-index: 100;
+  background-color: white !important;
+}
+.classTable td{
+  padding: 12px;
+  text-align: center;
+}
+.classTable .classNameTd{
+  position: relative;
+  text-align: left;
+  padding-left: 30px;
+}
