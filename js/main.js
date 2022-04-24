@@ -58,24 +58,38 @@ function createTable(tableInfo) {
       let tr = document.createElement("tr");
       if(i === 0) {
         let th = document.createElement("th");
-        th.innerText = dayOfWeekInfo.dayOfWeek;
+        if(dayOfWeekInfo.dayOfWeek.substr(3,1) === "日"){
+          th.innerText = dayOfWeekInfo.dayOfWeek.substr(1,1);
+        }else{
+          th.innerText = dayOfWeekInfo.dayOfWeek.substr(3,1);
+        }
         th.setAttribute("rowspan",dayOfWeekInfo.classes.length);
-        th.innerText = dayOfWeekInfo.dayOfWeek;
+        th.classList.add("border-top");
         tr.appendChild(th);
       }
+
       let periodTd = document.createElement("td");
       periodTd.classList.add("periodTd");
+      if(i === 0) {
+        periodTd.classList.add("border-top");
+      }
       periodTd.innerText = dayOfWeekInfo.periods[i].innerText.split("春" || "秋")[0];
       tr.appendChild(periodTd);
 
       let classNameTd = document.createElement("td");
       classNameTd.classList.add("classNameTd");
+      if(i === 0) {
+        classNameTd.classList.add("border-top");
+      }
       classNameTd.innerText = omit(dayOfWeekInfo.classes[i].innerText);
       tr.appendChild(classNameTd);
       
       tr.appendChild(dayOfWeekInfo.classes[i].childNodes[1]);
 
       let teacherNameTd = document.createElement("td");
+      if(i === 0) {
+        teacherNameTd.classList.add("border-top");
+      }
       teacherNameTd.innerText = dayOfWeekInfo.teacherNames[i];
       tr.appendChild(teacherNameTd);
       
