@@ -12,9 +12,6 @@ function moveNewsArea() {
   let form = document.getElementById("homehomlInfo");
   form.appendChild(newsArea);
   let newsSubO = newsArea.getElementsByClassName("newsSubO");
-  // for(let news of newsSubO){
-  //   news.innerText = news.innerText.substr(13);
-  // }
 }
 
 
@@ -42,7 +39,6 @@ function getClassData() {
     const classes = dayOfWeekClasses[i].getElementsByClassName("courseCardName");
     tableInfo[i].classes = classes;
     let teacherNameTags = dayOfWeekClasses[i].getElementsByClassName("courseCardUser");
-    console.log(teacherNameTags);
     let teacherNames = [];
     for(j=0;j < teacherNameTags.length;j++) {
       teacherNames.push(teacherNameTags[j].innerText.split("[")[0]);
@@ -89,7 +85,6 @@ function createTable(tableInfo) {
     }
   }
   let searchBox = document.getElementsByClassName("courseSearchArea");
-  console.log(classTable);
   searchBox[0].after(classTable);
 }
 function omit(className) {
